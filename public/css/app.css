@@ -1,0 +1,358 @@
+/* ===== VARIABLES ===== */
+:root {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --text: #1e293b;
+  --text-light: #64748b;
+  --border: #e2e8f0;
+  --bg: #f8fafc;
+  --card-bg: #ffffff;
+  --radius: 12px;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+/* ===== BASE ===== */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* ===== NAVBAR ===== */
+.navbar-brand {
+  font-weight: 600;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gradient);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  color: var(--text-light);
+}
+
+.btn-login,
+.btn-logout {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: var(--transition);
+}
+
+.btn-login {
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-login:hover {
+  background-color: #f1f5f9;
+}
+
+.btn-logout {
+  border: 1px solid #fee2e2;
+  color: #dc2626;
+  background-color: #fef2f2;
+}
+
+.btn-logout:hover {
+  background-color: #fee2e2;
+}
+
+.btn-primary {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  background: var(--gradient);
+  color: white;
+  border: none;
+  transition: var(--transition);
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* ===== TASK CARD ===== */
+.task-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  transition: var(--transition);
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.task-header h4 {
+  font-weight: 600;
+  margin: 0;
+}
+
+.task-count {
+  font-size: 0.875rem;
+  color: var(--text-light);
+}
+
+/* ===== TASK FORM ===== */
+.task-form {
+  margin-bottom: 1.5rem;
+}
+
+.input-group {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.task-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px 0 0 8px;
+  font-size: 0.9375rem;
+  transition: var(--transition);
+}
+
+.task-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.btn-add {
+  padding: 0 1.25rem;
+  background: var(--gradient);
+  color: white;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.btn-add:hover {
+  opacity: 0.9;
+}
+
+.task-meta {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.date-picker,
+.priority-select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: var(--transition);
+}
+
+.date-picker {
+  width: 140px;
+}
+
+.priority-select {
+  width: 120px;
+}
+
+.date-picker:focus,
+.priority-select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* ===== TASK LIST ===== */
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.task-item {
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: var(--transition);
+  animation: fadeIn 0.3s ease-out forwards;
+  opacity: 0;
+}
+
+.task-item:hover {
+  background-color: #f8fafc;
+}
+
+.task-item.completed {
+  opacity: 0.7;
+}
+
+.task-item.completed .task-title {
+  text-decoration: line-through;
+  color: var(--text-light);
+}
+
+.task-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.task-checkbox {
+  position: relative;
+  cursor: pointer;
+  margin-top: 0.25rem;
+}
+
+.task-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--primary);
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.task-checkbox input:checked ~ .checkmark {
+  background-color: var(--primary);
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 4px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.task-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.task-body {
+  flex: 1;
+}
+
+.task-title {
+  display: block;
+  font-size: 0.9375rem;
+  margin-bottom: 0.25rem;
+}
+
+.task-tags {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.task-due {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--text-light);
+}
+
+.task-priority {
+  padding: 0.125rem 0.5rem;
+  border-radius: 1rem;
+  font-weight: 500;
+}
+
+.priority-low {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.priority-medium {
+  background-color: #fef9c3;
+  color: #854d0e;
+}
+
+.priority-high {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.task-delete {
+  margin-left: auto;
+}
+
+.btn-delete {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 0.25rem;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.task-item:hover .btn-delete {
+  opacity: 1;
+}
+
+.btn-delete:hover {
+  color: #dc2626;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.task-list li:nth-child(1) { animation-delay: 0.1s; }
+.task-list li:nth-child(2) { animation-delay: 0.2s; }
+.task-list li:nth-child(3) { animation-delay: 0.3s; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .task-meta {
+    flex-direction: column;
+  }
+  
+  .date-picker,
+  .priority-select {
+    width: 100%;
+  }
+}
