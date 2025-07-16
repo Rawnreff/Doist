@@ -41,6 +41,68 @@
                 </div>
             </form>
 
+            <!-- Tambahkan di bawah task-header -->
+<div class="task-controls">
+    <!-- Filter by Status -->
+    <div class="filter-group">
+        <span class="filter-label">Status:</span>
+        <a href="{{ request()->fullUrlWithQuery(['status' => '']) }}" 
+           class="filter-select {{ !request()->has('status') ? 'active-filter' : '' }}">
+            All
+        </a>
+        <a href="{{ request()->fullUrlWithQuery(['status' => 'pending']) }}" 
+           class="filter-select {{ request()->input('status') === 'pending' ? 'active-filter' : '' }}">
+            Pending
+        </a>
+        <a href="{{ request()->fullUrlWithQuery(['status' => 'completed']) }}" 
+           class="filter-select {{ request()->input('status') === 'completed' ? 'active-filter' : '' }}">
+            Completed
+        </a>
+    </div>
+    
+    <!-- Filter by Priority -->
+    <div class="filter-group">
+        <span class="filter-label">Priority:</span>
+        <a href="{{ request()->fullUrlWithQuery(['priority' => '']) }}" 
+           class="filter-select {{ !request()->has('priority') ? 'active-filter' : '' }}">
+            All
+        </a>
+        <a href="{{ request()->fullUrlWithQuery(['priority' => 'high']) }}" 
+           class="filter-select {{ request()->input('priority') === 'high' ? 'active-filter' : '' }}">
+            High
+        </a>
+        <a href="{{ request()->fullUrlWithQuery(['priority' => 'medium']) }}" 
+           class="filter-select {{ request()->input('priority') === 'medium' ? 'active-filter' : '' }}">
+            Medium
+        </a>
+        <a href="{{ request()->fullUrlWithQuery(['priority' => 'low']) }}" 
+           class="filter-select {{ request()->input('priority') === 'low' ? 'active-filter' : '' }}">
+            Low
+        </a>
+    </div>
+    
+    <!-- Sort Options -->
+    <div class="filter-group">
+        <span class="filter-label">Sort by:</span>
+        <a href="{{ request()->fullUrlWithQuery(['sort' => 'latest']) }}" 
+           class="filter-select {{ request()->input('sort') === 'latest' || !request()->has('sort') ? 'active-filter' : '' }}">
+            Newest
+        </a>
+        <a href="{{ request()->fullUrlWithQuery(['sort' => 'oldest']) }}" 
+           class="filter-select {{ request()->input('sort') === 'oldest' ? 'active-filter' : '' }}">
+            Oldest
+        </a>
+        <a href="{{ request()->fullUrlWithQuery(['sort' => 'due_date']) }}" 
+           class="filter-select {{ request()->input('sort') === 'due_date' ? 'active-filter' : '' }}">
+            Due Date
+        </a>
+        <a href="{{ request()->fullUrlWithQuery(['sort' => 'priority']) }}" 
+           class="filter-select {{ request()->input('sort') === 'priority' ? 'active-filter' : '' }}">
+            Priority
+        </a>
+    </div>
+</div>
+
             <!-- Task List -->
             <ul class="task-list">
                 @foreach ($tasks as $task)
@@ -168,6 +230,164 @@ document.addEventListener('DOMContentLoaded', function() {
         item.style.animationDelay = `${index * 0.1}s`;
         item.classList.add('animate-in');
     });
+});
+</script>
+
+<!-- Pomodoro Timer -->
+<div class="pomodoro-container">
+    <div class="pomodoro-card" id="pomodoroCard">
+        <div class="pomodoro-header">
+            <h4 class="pomodoro-title">Pomodoro Timer</h4>
+            <button class="pomodoro-close" id="pomodoroClose">&times;</button>
+        </div>
+        <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
+        <div class="pomodoro-controls">
+            <button class="pomodoro-btn pomodoro-start" id="pomodoroStart">Start</button>
+            <button class="pomodoro-btn pomodoro-reset" id="pomodoroReset">Reset</button>
+        </div>
+        <div class="pomodoro-sessions">
+            <div class="pomodoro-session">
+                <div class="pomodoro-session-label">Session</div>
+                <div class="pomodoro-session-value" id="pomodoroSession">1/4</div>
+            </div>
+            <div class="pomodoro-session">
+                <div class="pomodoro-session-label">Status</div>
+                <div class="pomodoro-session-value" id="pomodoroStatus">Ready</div>
+            </div>
+        </div>
+    </div>
+    <button class="pomodoro-toggle" id="pomodoroToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+    </button>
+</div>
+
+<script>
+// Pomodoro Timer Logic
+document.addEventListener('DOMContentLoaded', function() {
+    const pomodoroToggle = document.getElementById('pomodoroToggle');
+    const pomodoroCard = document.getElementById('pomodoroCard');
+    const pomodoroClose = document.getElementById('pomodoroClose');
+    const pomodoroTimer = document.getElementById('pomodoroTimer');
+    const pomodoroStart = document.getElementById('pomodoroStart');
+    const pomodoroReset = document.getElementById('pomodoroReset');
+    const pomodoroSession = document.getElementById('pomodoroSession');
+    const pomodoroStatus = document.getElementById('pomodoroStatus');
+    
+    let timer;
+    let minutes = 25;
+    let seconds = 0;
+    let isRunning = false;
+    let sessionCount = 1;
+    let isBreak = false;
+    
+    // Toggle Pomodoro Card
+    pomodoroToggle.addEventListener('click', function() {
+        pomodoroCard.classList.toggle('active');
+    });
+    
+    pomodoroClose.addEventListener('click', function() {
+        pomodoroCard.classList.remove('active');
+    });
+    
+    // Update Timer Display
+    function updateDisplay() {
+        const displayMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        const displaySeconds = seconds < 10 ? `0${seconds}` : seconds;
+        pomodoroTimer.textContent = `${displayMinutes}:${displaySeconds}`;
+    }
+    
+    // Start/Pause Timer
+    pomodoroStart.addEventListener('click', function() {
+        if (!isRunning) {
+            // Start the timer
+            isRunning = true;
+            pomodoroStart.textContent = 'Pause';
+            pomodoroStatus.textContent = isBreak ? 'Break' : 'Working';
+            
+            timer = setInterval(function() {
+                if (seconds === 0) {
+                    if (minutes === 0) {
+                        // Timer completed
+                        clearInterval(timer);
+                        isRunning = false;
+                        
+                        // Play sound
+                        const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
+                        audio.play();
+                        
+                        if (!isBreak) {
+                            // Work session completed
+                            if (sessionCount % 4 === 0) {
+                                // Long break after 4 sessions
+                                minutes = 15;
+                                pomodoroStatus.textContent = 'Long Break';
+                            } else {
+                                // Short break
+                                minutes = 5;
+                                pomodoroStatus.textContent = 'Short Break';
+                            }
+                            isBreak = true;
+                        } else {
+                            // Break completed
+                            minutes = 25;
+                            isBreak = false;
+                            sessionCount++;
+                            pomodoroSession.textContent = `${sessionCount > 4 ? 4 : sessionCount}/4`;
+                            pomodoroStatus.textContent = 'Working';
+                        }
+                        
+                        seconds = 0;
+                        updateDisplay();
+                        pomodoroStart.textContent = 'Start';
+                        
+                        // Show notification
+                        if (Notification.permission === 'granted') {
+                            new Notification(isBreak ? 'Break Time!' : 'Back to Work!', {
+                                body: isBreak ? 'Take a break!' : 'Time to focus!'
+                            });
+                        }
+                    } else {
+                        minutes--;
+                        seconds = 59;
+                    }
+                } else {
+                    seconds--;
+                }
+                updateDisplay();
+            }, 1000);
+        } else {
+            // Pause the timer
+            clearInterval(timer);
+            isRunning = false;
+            pomodoroStart.textContent = 'Start';
+            pomodoroStatus.textContent = 'Paused';
+        }
+    });
+    
+    // Reset Timer
+    pomodoroReset.addEventListener('click', function() {
+        clearInterval(timer);
+        isRunning = false;
+        minutes = 25;
+        seconds = 0;
+        sessionCount = 1;
+        isBreak = false;
+        pomodoroStart.textContent = 'Start';
+        pomodoroStatus.textContent = 'Ready';
+        pomodoroSession.textContent = '1/4';
+        updateDisplay();
+    });
+    
+    // Initialize
+    updateDisplay();
+    
+    // Request notification permission
+    if (Notification.permission !== 'granted') {
+        Notification.requestPermission();
+    }
 });
 </script>
 @endsection
