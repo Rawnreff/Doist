@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\PodomoroController;
+use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\TrashController;
 
 Auth::routes(['register' => true]); // Sesuaikan dengan kebutuhan registrasi
 
@@ -17,4 +19,20 @@ Route::middleware('auth')->group(function () {
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
     Route::patch('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+});
+
+Route::middleware('auth')->group(function () {
+    // Route yang sudah ada...
+    Route::get('/podomoro', [PodomoroController::class, 'index'])->name('podomoro');
+    Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
+});
+
+// routes/web.php
+Route::middleware('auth')->group(function () {
+    // Route lainnya...
+    Route::prefix('trash')->group(function () {
+        Route::get('/', [TrashController::class, 'index'])->name('trash.index');
+        Route::post('/{id}/restore', [TrashController::class, 'restore'])->name('trash.restore');
+        Route::delete('/{id}', [TrashController::class, 'destroy'])->name('trash.destroy');
+    });
 });

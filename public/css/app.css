@@ -21,6 +21,43 @@ body {
   line-height: 1.6;
 }
 
+/* ===== GLOBAL LINK & BUTTON STYLES ===== */
+a {
+    text-decoration: none !important;
+    transition: var(--transition);
+}
+
+.btn, .btn-login, .btn-logout, .btn-primary, 
+.btn-add, .btn-delete, .filter-select, 
+.podomoro-btn, .podomoro-close {
+    text-decoration: none !important;
+}
+
+/* Khusus untuk tombol filter aktif */
+.active-filter {
+    text-decoration: none !important;
+}
+
+/* Hover effects tanpa underline */
+a:hover, a:focus {
+    text-decoration: none !important;
+}
+
+/* Navbar links */
+.navbar-brand:hover, .navbar-brand:focus {
+    text-decoration: none !important;
+}
+
+/* Task item links */
+.task-item a:hover, .task-item a:focus {
+    text-decoration: none !important;
+}
+
+/* podomoro timer links */
+.podomoro-container a:hover, .podomoro-container a:focus {
+    text-decoration: none !important;
+}
+
 /* ===== NAVBAR ===== */
 .navbar-brand {
   font-weight: 600;
@@ -397,15 +434,15 @@ body {
     border-color: var(--primary);
 }
 
-/* ===== POMODORO TIMER STYLES ===== */
-.pomodoro-container {
+/* ===== podomoro TIMER STYLES ===== */
+.podomoro-container {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
     z-index: 100;
 }
 
-.pomodoro-toggle {
+.podomoro-toggle {
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -420,11 +457,11 @@ body {
     transition: var(--transition);
 }
 
-.pomodoro-toggle:hover {
+.podomoro-toggle:hover {
     transform: scale(1.1);
 }
 
-.pomodoro-card {
+.podomoro-card {
     position: absolute;
     bottom: 70px;
     right: 0;
@@ -436,31 +473,31 @@ body {
     display: none;
 }
 
-.pomodoro-card.active {
+.podomoro-card.active {
     display: block;
     animation: fadeInUp 0.3s ease-out;
 }
 
-.pomodoro-header {
+.podomoro-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
 }
 
-.pomodoro-title {
+.podomoro-title {
     font-weight: 600;
     margin: 0;
 }
 
-.pomodoro-close {
+.podomoro-close {
     background: none;
     border: none;
     color: var(--text-light);
     cursor: pointer;
 }
 
-.pomodoro-timer {
+.podomoro-timer {
     font-size: 3rem;
     font-weight: 600;
     text-align: center;
@@ -468,13 +505,13 @@ body {
     font-family: 'Inter', monospace;
 }
 
-.pomodoro-controls {
+.podomoro-controls {
     display: flex;
     justify-content: center;
     gap: 0.5rem;
 }
 
-.pomodoro-btn {
+.podomoro-btn {
     padding: 0.5rem 1rem;
     border-radius: 6px;
     border: none;
@@ -483,25 +520,25 @@ body {
     transition: var(--transition);
 }
 
-.pomodoro-start {
+.podomoro-start {
     background: var(--primary);
     color: white;
 }
 
-.pomodoro-start:hover {
+.podomoro-start:hover {
     background: var(--primary-dark);
 }
 
-.pomodoro-reset {
+.podomoro-reset {
     background: #f1f5f9;
     color: var(--text);
 }
 
-.pomodoro-reset:hover {
+.podomoro-reset:hover {
     background: #e2e8f0;
 }
 
-.pomodoro-sessions {
+.podomoro-sessions {
     display: flex;
     justify-content: space-between;
     margin-top: 1rem;
@@ -509,16 +546,16 @@ body {
     border-top: 1px solid var(--border);
 }
 
-.pomodoro-session {
+.podomoro-session {
     text-align: center;
 }
 
-.pomodoro-session-label {
+.podomoro-session-label {
     font-size: 0.75rem;
     color: var(--text-light);
 }
 
-.pomodoro-session-value {
+.podomoro-session-value {
     font-weight: 600;
 }
 
@@ -531,4 +568,314 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* ===== LAYOUT WITH SIDEBAR ===== */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0;
+}
+
+.sidebar-header {
+    padding: 0 1.5rem 1.5rem;
+}
+
+.sidebar-brand {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.sidebar-nav {
+    flex: 1;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    color: var(--text-light);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.nav-item:hover {
+    background-color: var(--bg);
+    color: var(--primary);
+}
+
+.nav-item i {
+    margin-right: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.sidebar-footer {
+    padding: 1rem 1.5rem 0;
+    border-top: 1px solid var(--border);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--gradient);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    font-weight: 600;
+}
+
+.user-name {
+    font-size: 0.875rem;
+}
+
+.btn-logout {
+    width: 100%;
+    padding: 0.5rem;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-logout:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.btn-logout i {
+    margin-right: 0.5rem;
+}
+
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    background-color: var(--bg);
+}
+
+/* ===== podomoro PAGE ===== */
+.podomoro-page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.podomoro-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    text-align: center;
+}
+
+.podomoro-header {
+    margin-bottom: 2rem;
+}
+
+.podomoro-modes {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.mode-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--text-light);
+    cursor: pointer;
+}
+
+.mode-btn.active {
+    background: var(--primary);
+    color: white;
+}
+
+.podomoro-timer {
+    font-size: 5rem;
+    font-weight: 600;
+    font-family: monospace;
+    margin: 1.5rem 0;
+    color: var(--text);
+}
+
+.podomoro-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.podomoro-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.start-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.reset-btn {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.podomoro-session {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+}
+
+.podomoro-task {
+    text-align: left;
+}
+
+.task-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-top: 0.5rem;
+}
+
+/* ===== CALENDAR PAGE ===== */
+.calendar-page {
+    display: flex;
+    gap: 2rem;
+}
+
+.calendar-container {
+    flex: 1;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.calendar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.calendar-nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-light);
+}
+
+.today-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.calendar-day-header {
+    text-align: center;
+    font-weight: 500;
+    padding: 0.5rem;
+    color: var(--text-light);
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    background: var(--card-bg);
+    border-radius: 6px;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.calendar-day:hover {
+    background: var(--bg);
+}
+
+.calendar-day.empty {
+    background: none;
+    cursor: default;
+}
+
+.calendar-day.today {
+    border: 2px solid var(--primary);
+}
+
+.calendar-day-number {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.calendar-day-tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.calendar-task-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.task-list-sidebar {
+    width: 300px;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.calendar-task-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.task-title.completed {
+    text-decoration: line-through;
+    color: var(--text-light);
 }

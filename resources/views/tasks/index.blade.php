@@ -233,30 +233,30 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<!-- Pomodoro Timer -->
-<div class="pomodoro-container">
-    <div class="pomodoro-card" id="pomodoroCard">
-        <div class="pomodoro-header">
-            <h4 class="pomodoro-title">Pomodoro Timer</h4>
-            <button class="pomodoro-close" id="pomodoroClose">&times;</button>
+<!-- podomoro Timer -->
+<div class="podomoro-container">
+    <div class="podomoro-card" id="podomoroCard">
+        <div class="podomoro-header">
+            <h4 class="podomoro-title">Podomoro Timer</h4>
+            <button class="podomoro-close" id="podomoroClose">&times;</button>
         </div>
-        <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
-        <div class="pomodoro-controls">
-            <button class="pomodoro-btn pomodoro-start" id="pomodoroStart">Start</button>
-            <button class="pomodoro-btn pomodoro-reset" id="pomodoroReset">Reset</button>
+        <div class="podomoro-timer" id="podomoroTimer">25:00</div>
+        <div class="podomoro-controls">
+            <button class="podomoro-btn podomoro-start" id="podomoroStart">Start</button>
+            <button class="podomoro-btn podomoro-reset" id="podomoroReset">Reset</button>
         </div>
-        <div class="pomodoro-sessions">
-            <div class="pomodoro-session">
-                <div class="pomodoro-session-label">Session</div>
-                <div class="pomodoro-session-value" id="pomodoroSession">1/4</div>
+        <div class="podomoro-sessions">
+            <div class="podomoro-session">
+                <div class="podomoro-session-label">Session</div>
+                <div class="podomoro-session-value" id="podomoroSession">1/4</div>
             </div>
-            <div class="pomodoro-session">
-                <div class="pomodoro-session-label">Status</div>
-                <div class="pomodoro-session-value" id="pomodoroStatus">Ready</div>
+            <div class="podomoro-session">
+                <div class="podomoro-session-label">Status</div>
+                <div class="podomoro-session-value" id="podomoroStatus">Ready</div>
             </div>
         </div>
     </div>
-    <button class="pomodoro-toggle" id="pomodoroToggle">
+    <button class="podomoro-toggle" id="podomoroToggle">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
@@ -265,16 +265,16 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <script>
-// Pomodoro Timer Logic
+// podomoro Timer Logic
 document.addEventListener('DOMContentLoaded', function() {
-    const pomodoroToggle = document.getElementById('pomodoroToggle');
-    const pomodoroCard = document.getElementById('pomodoroCard');
-    const pomodoroClose = document.getElementById('pomodoroClose');
-    const pomodoroTimer = document.getElementById('pomodoroTimer');
-    const pomodoroStart = document.getElementById('pomodoroStart');
-    const pomodoroReset = document.getElementById('pomodoroReset');
-    const pomodoroSession = document.getElementById('pomodoroSession');
-    const pomodoroStatus = document.getElementById('pomodoroStatus');
+    const podomoroToggle = document.getElementById('podomoroToggle');
+    const podomoroCard = document.getElementById('podomoroCard');
+    const podomoroClose = document.getElementById('podomoroClose');
+    const podomoroTimer = document.getElementById('podomoroTimer');
+    const podomoroStart = document.getElementById('podomoroStart');
+    const podomoroReset = document.getElementById('podomoroReset');
+    const podomoroSession = document.getElementById('podomoroSession');
+    const podomoroStatus = document.getElementById('podomoroStatus');
     
     let timer;
     let minutes = 25;
@@ -283,29 +283,29 @@ document.addEventListener('DOMContentLoaded', function() {
     let sessionCount = 1;
     let isBreak = false;
     
-    // Toggle Pomodoro Card
-    pomodoroToggle.addEventListener('click', function() {
-        pomodoroCard.classList.toggle('active');
+    // Toggle podomoro Card
+    podomoroToggle.addEventListener('click', function() {
+        podomoroCard.classList.toggle('active');
     });
     
-    pomodoroClose.addEventListener('click', function() {
-        pomodoroCard.classList.remove('active');
+    podomoroClose.addEventListener('click', function() {
+        podomoroCard.classList.remove('active');
     });
     
     // Update Timer Display
     function updateDisplay() {
         const displayMinutes = minutes < 10 ? `0${minutes}` : minutes;
         const displaySeconds = seconds < 10 ? `0${seconds}` : seconds;
-        pomodoroTimer.textContent = `${displayMinutes}:${displaySeconds}`;
+        podomoroTimer.textContent = `${displayMinutes}:${displaySeconds}`;
     }
     
     // Start/Pause Timer
-    pomodoroStart.addEventListener('click', function() {
+    podomoroStart.addEventListener('click', function() {
         if (!isRunning) {
             // Start the timer
             isRunning = true;
-            pomodoroStart.textContent = 'Pause';
-            pomodoroStatus.textContent = isBreak ? 'Break' : 'Working';
+            podomoroStart.textContent = 'Pause';
+            podomoroStatus.textContent = isBreak ? 'Break' : 'Working';
             
             timer = setInterval(function() {
                 if (seconds === 0) {
@@ -323,11 +323,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             if (sessionCount % 4 === 0) {
                                 // Long break after 4 sessions
                                 minutes = 15;
-                                pomodoroStatus.textContent = 'Long Break';
+                                podomoroStatus.textContent = 'Long Break';
                             } else {
                                 // Short break
                                 minutes = 5;
-                                pomodoroStatus.textContent = 'Short Break';
+                                podomoroStatus.textContent = 'Short Break';
                             }
                             isBreak = true;
                         } else {
@@ -335,13 +335,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             minutes = 25;
                             isBreak = false;
                             sessionCount++;
-                            pomodoroSession.textContent = `${sessionCount > 4 ? 4 : sessionCount}/4`;
-                            pomodoroStatus.textContent = 'Working';
+                            podomoroSession.textContent = `${sessionCount > 4 ? 4 : sessionCount}/4`;
+                            podomoroStatus.textContent = 'Working';
                         }
                         
                         seconds = 0;
                         updateDisplay();
-                        pomodoroStart.textContent = 'Start';
+                        podomoroStart.textContent = 'Start';
                         
                         // Show notification
                         if (Notification.permission === 'granted') {
@@ -362,22 +362,22 @@ document.addEventListener('DOMContentLoaded', function() {
             // Pause the timer
             clearInterval(timer);
             isRunning = false;
-            pomodoroStart.textContent = 'Start';
-            pomodoroStatus.textContent = 'Paused';
+            podomoroStart.textContent = 'Start';
+            podomoroStatus.textContent = 'Paused';
         }
     });
     
     // Reset Timer
-    pomodoroReset.addEventListener('click', function() {
+    podomoroReset.addEventListener('click', function() {
         clearInterval(timer);
         isRunning = false;
         minutes = 25;
         seconds = 0;
         sessionCount = 1;
         isBreak = false;
-        pomodoroStart.textContent = 'Start';
-        pomodoroStatus.textContent = 'Ready';
-        pomodoroSession.textContent = '1/4';
+        podomoroStart.textContent = 'Start';
+        podomoroStatus.textContent = 'Ready';
+        podomoroSession.textContent = '1/4';
         updateDisplay();
     });
     
