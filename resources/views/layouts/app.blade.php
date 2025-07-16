@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doist | @yield('title')</title>
+    <title>Doist @yield('title')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
@@ -150,6 +150,7 @@
             padding: 2rem;
         }
     </style>
+    @stack('styles')
 </head>
 <body>
     <!-- Vertical Sidebar -->
@@ -185,28 +186,18 @@
         
         <div class="user-profile">
             @auth
-                <div class="user-profile">
-                    <div class="user-avatar" id="userAvatar">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                    </div>
-                    <div class="logout-popup" id="logoutPopup">
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn-logout">
-                                <i class="bi bi-box-arrow-right"></i> Sign Out
-                            </button>
-                        </form>
-                    </div>
+                <div class="user-avatar" id="userAvatar">
+                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                </div>
+                <div class="logout-popup" id="logoutPopup">
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn-logout">
+                            <i class="bi bi-box-arrow-right"></i> Sign Out
+                        </button>
+                    </form>
                 </div>
             @endauth
-            <div class="logout-popup" id="logoutPopup">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn-logout">
-                        <i class="bi bi-box-arrow-right"></i> Sign Out
-                    </button>
-                </form>
-            </div>
         </div>
     </div>
 
@@ -215,16 +206,19 @@
         @yield('content')
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @yield('scripts')
     <script>
         // Toggle logout popup
-        document.getElementById('userAvatar').addEventListener('click', function() {
+        document.getElementById('userAvatar')?.addEventListener('click', function() {
             document.getElementById('logoutPopup').classList.toggle('show');
         });
         
         // Close popup when clicking outside
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.user-profile')) {
-                document.getElementById('logoutPopup').classList.remove('show');
+                const popup = document.getElementById('logoutPopup');
+                if (popup) popup.classList.remove('show');
             }
         });
     </script>

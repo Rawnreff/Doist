@@ -135,11 +135,6 @@ a:hover, a:focus {
   transition: var(--transition);
 }
 
-.task-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-}
-
 .task-header {
   display: flex;
   align-items: center;

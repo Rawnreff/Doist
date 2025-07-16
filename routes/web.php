@@ -6,7 +6,7 @@ use App\Http\Controllers\PodomoroController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\TrashController;
 
-Auth::routes(['register' => true]); // Sesuaikan dengan kebutuhan registrasi
+Auth::routes(['register' => true]);
 
 // Redirect setelah login sukses
 Route::get('/home', function () {
@@ -15,21 +15,19 @@ Route::get('/home', function () {
 
 // Routes yang membutuhkan autentikasi
 Route::middleware('auth')->group(function () {
+    // Task Routes
     Route::get('/', [TaskController::class, 'index'])->name('tasks.index');
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
     Route::patch('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
-});
-
-Route::middleware('auth')->group(function () {
-    // Route yang sudah ada...
+    
+    // Podomoro Route
     Route::get('/podomoro', [PodomoroController::class, 'index'])->name('podomoro');
+    
+    // Calendar Route
     Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar');
-});
-
-// routes/web.php
-Route::middleware('auth')->group(function () {
-    // Route lainnya...
+    
+    // Trash Routes
     Route::prefix('trash')->group(function () {
         Route::get('/', [TrashController::class, 'index'])->name('trash.index');
         Route::post('/{id}/restore', [TrashController::class, 'restore'])->name('trash.restore');

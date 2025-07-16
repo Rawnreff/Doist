@@ -1,39 +1,39 @@
 @extends('layouts.app')
 
-@section('title', 'Podomoro Timer')
+@section('title', 'Pomodoro Timer')
 
 @section('content')
-<div class="podomoro-container">
-    <div class="podomoro-card">
-        <div class="podomoro-header">
+<div class="pomodoro-app">
+    <div class="pomodoro-card">
+        <div class="pomodoro-header">
             <h2>Podomoro Timer</h2>
-            <div class="podomoro-modes">
-                <button class="mode-btn active" data-mode="podomoro">Podomoro</button>
-                <button class="mode-btn" data-mode="short-break">Short Break</button>
-                <button class="mode-btn" data-mode="long-break">Long Break</button>
+            <div class="pomodoro-tabs">
+                <button class="tab-btn active" data-mode="pomodoro">Podomoro</button>
+                <button class="tab-btn" data-mode="short-break">Short Break</button>
+                <button class="tab-btn" data-mode="long-break">Long Break</button>
             </div>
         </div>
         
-        <div class="podomoro-timer">
+        <div class="pomodoro-display">
             <span id="minutes">25</span>:<span id="seconds">00</span>
         </div>
         
-        <div class="podomoro-controls">
-            <button id="startBtn" class="podomoro-btn start-btn">
+        <div class="pomodoro-controls">
+            <button id="startBtn" class="control-btn start-btn">
                 <i class="bi bi-play-fill"></i> Start
             </button>
-            <button id="resetBtn" class="podomoro-btn reset-btn">
+            <button id="resetBtn" class="control-btn reset-btn">
                 <i class="bi bi-arrow-counterclockwise"></i> Reset
             </button>
         </div>
         
-        <div class="podomoro-session">
+        <div class="pomodoro-session">
             <span id="sessionCount">Session: 1/4</span>
         </div>
         
-        <div class="podomoro-task">
+        <div class="pomodoro-task">
             <h4>Current Task</h4>
-            <select id="taskSelect" class="task-select">
+            <select id="taskSelect" class="task-input">
                 <option value="">Select a task to focus on</option>
                 @foreach($pendingTasks as $task)
                     <option value="{{ $task->id }}">{{ $task->title }}</option>
@@ -43,8 +43,8 @@
     </div>
 </div>
 <style>
-    /* Podomoro Timer Styles */
-    .podomoro-container {
+    /* Pomodoro Timer Styles */
+    .pomodoro-app {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -53,7 +53,7 @@
         background-color: var(--bg);
     }
     
-    .podomoro-card {
+    .pomodoro-card {
         width: 100%;
         max-width: 500px;
         background: var(--card-bg);
@@ -63,25 +63,25 @@
         text-align: center;
     }
     
-    .podomoro-header {
+    .pomodoro-header {
         margin-bottom: 2rem;
     }
     
-    .podomoro-header h2 {
+    .pomodoro-header h2 {
         font-size: 1.75rem;
         font-weight: 600;
         color: var(--text);
         margin-bottom: 1.5rem;
     }
     
-    .podomoro-modes {
+    .pomodoro-tabs {
         display: flex;
         justify-content: center;
         gap: 0.75rem;
         margin-bottom: 1.5rem;
     }
     
-    .mode-btn {
+    .tab-btn {
         padding: 0.5rem 1rem;
         border: none;
         border-radius: 50px;
@@ -93,12 +93,12 @@
         transition: all 0.3s ease;
     }
     
-    .mode-btn.active {
+    .tab-btn.active {
         background-color: var(--primary);
         color: white;
     }
     
-    .podomoro-timer {
+    .pomodoro-display {
         font-size: 5rem;
         font-weight: 700;
         font-family: 'Inter', monospace;
@@ -107,14 +107,14 @@
         line-height: 1;
     }
     
-    .podomoro-controls {
+    .pomodoro-controls {
         display: flex;
         justify-content: center;
         gap: 1.5rem;
         margin: 2rem 0;
     }
     
-    .podomoro-btn {
+    .control-btn {
         padding: 0.75rem 1.75rem;
         border: none;
         border-radius: 50px;
@@ -147,24 +147,24 @@
         background-color: #e5e7eb;
     }
     
-    .podomoro-session {
+    .pomodoro-session {
         font-size: 0.875rem;
         color: var(--text-light);
         margin-bottom: 2rem;
     }
     
-    .podomoro-task {
+    .pomodoro-task {
         margin-top: 2rem;
         text-align: left;
     }
     
-    .podomoro-task h4 {
+    .pomodoro-task h4 {
         font-size: 1rem;
         color: var(--text-light);
         margin-bottom: 0.75rem;
     }
     
-    .task-select {
+    .task-input {
         width: 100%;
         padding: 0.875rem 1rem;
         border: 1px solid var(--border);
@@ -175,7 +175,7 @@
         transition: all 0.3s;
     }
     
-    .task-select:focus {
+    .task-input:focus {
         outline: none;
         border-color: var(--primary);
         box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
@@ -187,38 +187,37 @@
         50% { transform: scale(1.05); }
     }
     
-    .podomoro-timer.active {
+    .pomodoro-display.active {
         animation: pulse 1s infinite;
         color: var(--primary);
     }
     
     /* Responsive Design */
     @media (max-width: 576px) {
-        .podomoro-container {
+        .pomodoro-app {
             padding: 1rem;
         }
         
-        .podomoro-card {
+        .pomodoro-card {
             padding: 1.5rem;
         }
         
-        .podomoro-timer {
+        .pomodoro-display {
             font-size: 3.5rem;
         }
         
-        .podomoro-controls {
+        .pomodoro-controls {
             flex-direction: column;
             gap: 1rem;
         }
         
-        .podomoro-btn {
+        .control-btn {
             width: 100%;
             justify-content: center;
         }
     }
 </style>
 
-@section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const minutesDisplay = document.getElementById('minutes');
@@ -226,19 +225,19 @@
         const startBtn = document.getElementById('startBtn');
         const resetBtn = document.getElementById('resetBtn');
         const sessionCount = document.getElementById('sessionCount');
-        const modeButtons = document.querySelectorAll('.mode-btn');
-        const timerDisplay = document.querySelector('.podomoro-timer');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const timerDisplay = document.querySelector('.pomodoro-display');
         
         let timer;
         let minutes = 25;
         let seconds = 0;
         let isRunning = false;
-        let currentMode = 'podomoro';
+        let currentMode = 'pomodoro';
         let sessionCountValue = 1;
         
         // Mode presets
         const modes = {
-            podomoro: { minutes: 25, color: 'var(--primary)' },
+            pomodoro: { minutes: 25, color: 'var(--primary)' },
             'short-break': { minutes: 5, color: '#10B981' },
             'long-break': { minutes: 15, color: '#3B82F6' }
         };
@@ -247,11 +246,11 @@
         updateDisplay();
         
         // Mode selection
-        modeButtons.forEach(button => {
+        tabButtons.forEach(button => {
             button.addEventListener('click', function() {
                 if (isRunning) return;
                 
-                modeButtons.forEach(btn => btn.classList.remove('active'));
+                tabButtons.forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
                 currentMode = this.dataset.mode;
                 
@@ -324,29 +323,29 @@
             const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
             audio.play();
             
-            // Update session count for podomoro mode
-            if (currentMode === 'podomoro') {
+            // Update session count for pomodoro mode
+            if (currentMode === 'pomodoro') {
                 sessionCountValue++;
                 sessionCount.textContent = `Session: ${Math.min(sessionCountValue, 4)}/4`;
                 
-                // Switch to break after podomoro
+                // Switch to break after pomodoro
                 if (sessionCountValue % 4 === 0) {
                     currentMode = 'long-break';
                 } else {
                     currentMode = 'short-break';
                 }
             } else {
-                // Switch back to podomoro after break
-                currentMode = 'podomoro';
+                // Switch back to pomodoro after break
+                currentMode = 'pomodoro';
             }
             
             // Update active button
-            document.querySelector(`.mode-btn[data-mode="${currentMode}"]`).click();
+            document.querySelector(`.tab-btn[data-mode="${currentMode}"]`).click();
             
             // Show notification
             if (Notification.permission === 'granted') {
                 new Notification('Timer Completed!', {
-                    body: currentMode === 'podomoro' ? 'Time to focus!' : 'Time for a break!'
+                    body: currentMode === 'pomodoro' ? 'Time to focus!' : 'Time for a break!'
                 });
             }
         }

@@ -43,12 +43,11 @@
                                 <i class="bi bi-arrow-counterclockwise"></i> Restore
                             </button>
                         </form>
-                        
                         <form action="{{ route('trash.destroy', $task->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn-delete">
-                                <i class="bi bi-trash-fill"></i> Delete Permanently
+                            <button type="submit" class="btn-destroy">
+                                <i class="bi bi-trash-fill"></i> Delete permanently
                             </button>
                         </form>
                     </div>
@@ -151,7 +150,7 @@
         gap: 0.75rem;
     }
     
-    .btn-restore, .btn-delete {
+    .btn-restore, .btn-destroy {
         padding: 0.5rem 1rem;
         border: none;
         border-radius: 4px;
@@ -172,12 +171,12 @@
         background-color: #bae6fd;
     }
     
-    .btn-delete {
+    .btn-destroy {
         background-color: #fee2e2;
         color: #991b1b;
     }
     
-    .btn-delete:hover {
+    .btn-destroy:hover {
         background-color: #fecaca;
     }
 </style>

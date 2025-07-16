@@ -42,22 +42,22 @@
             </form>
 
             <!-- Tambahkan di bawah task-header -->
-<div class="task-controls">
-    <!-- Filter by Status -->
-    <div class="filter-group">
-        <span class="filter-label">Status:</span>
-        <a href="{{ request()->fullUrlWithQuery(['status' => '']) }}" 
-           class="filter-select {{ !request()->has('status') ? 'active-filter' : '' }}">
-            All
-        </a>
-        <a href="{{ request()->fullUrlWithQuery(['status' => 'pending']) }}" 
-           class="filter-select {{ request()->input('status') === 'pending' ? 'active-filter' : '' }}">
-            Pending
-        </a>
-        <a href="{{ request()->fullUrlWithQuery(['status' => 'completed']) }}" 
-           class="filter-select {{ request()->input('status') === 'completed' ? 'active-filter' : '' }}">
-            Completed
-        </a>
+    <div class="task-controls">
+        <!-- Filter by Status -->
+        <div class="filter-group">
+            <span class="filter-label">Status:</span>
+            <a href="{{ request()->fullUrlWithQuery(['status' => '']) }}" 
+            class="filter-select {{ !request()->has('status') ? 'active-filter' : '' }}">
+                All
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['status' => 'pending']) }}" 
+            class="filter-select {{ request()->input('status') === 'pending' ? 'active-filter' : '' }}">
+                Pending
+            </a>
+            <a href="{{ request()->fullUrlWithQuery(['status' => 'completed']) }}" 
+            class="filter-select {{ request()->input('status') === 'completed' ? 'active-filter' : '' }}">
+                Completed
+            </a>
     </div>
     
     <!-- Filter by Priority -->
@@ -104,66 +104,66 @@
 </div>
 
             <!-- Task List -->
-            <ul class="task-list">
-                @foreach ($tasks as $task)
-                <li class="task-item {{ $task->completed ? 'completed' : '' }}">
-                    <!-- Update Form (for checkbox) -->
-                    <form id="update-form-{{ $task->id }}" 
-                          action="{{ route('tasks.update', $task) }}" 
-                          method="POST"
-                          class="d-inline">
-                        @csrf
-                        @method('PATCH')
-                        <input type="hidden" name="completed" value="{{ $task->completed ? 0 : 1 }}">
+                <ul class="task-list">
+                    @foreach ($tasks as $task)
+                    <li class="task-item {{ $task->completed ? 'completed' : '' }}">
+                        <!-- Update Form (for checkbox) -->
+                        <form id="update-form-{{ $task->id }}" 
+                            action="{{ route('tasks.update', $task) }}" 
+                            method="POST"
+                            class="d-inline">
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="completed" value="{{ $task->completed ? 0 : 1 }}">
+                            
+                            <!-- Checkbox -->
+                            <label class="task-checkbox">
+                                <input 
+                                    type="checkbox"
+                                    {{ $task->completed ? 'checked' : '' }}
+                                    onchange="
+                                        this.form.querySelector('input[name=\'completed\']').value = this.checked ? 1 : 0;
+                                        this.form.submit();
+                                    "
+                                >
+                                <span class="checkmark"></span>
+                            </label>
+                        </form>
                         
-                        <!-- Checkbox -->
-                        <label class="task-checkbox">
-                            <input 
-                                type="checkbox"
-                                {{ $task->completed ? 'checked' : '' }}
-                                onchange="
-                                    this.form.querySelector('input[name=\'completed\']').value = this.checked ? 1 : 0;
-                                    this.form.submit();
-                                "
-                            >
-                            <span class="checkmark"></span>
-                        </label>
-                    </form>
-                    
-                    <!-- Task Content -->
-                    <div class="task-body">
-                        <span class="task-title">{{ $task->title }}</span>
-                        <div class="task-tags">
-                            @if($task->due_date)
-                            <span class="task-due">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                                    <polyline points="7 3 7 8 15 8"></polyline>
-                                </svg>
-                                {{ $task->due_date->format('M j') }}
-                            </span>
-                            @endif
-                            <span class="task-priority priority-{{ $task->priority }}">
-                                {{ ucfirst($task->priority) }}
-                            </span>
+                        <!-- Task Content -->
+                        <div class="task-body">
+                            <span class="task-title">{{ $task->title }}</span>
+                            <div class="task-tags">
+                                @if($task->due_date)
+                                <span class="task-due">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                        <polyline points="7 3 7 8 15 8"></polyline>
+                                    </svg>
+                                    {{ $task->due_date->format('M j') }}
+                                </span>
+                                @endif
+                                <span class="task-priority priority-{{ $task->priority }}">
+                                    {{ ucfirst($task->priority) }}
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <!-- Delete Button -->
-                    <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="task-delete">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn-delete">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path d="M3 6h18"></path>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                            </svg>
-                        </button>
-                    </form>
-                </li>
-                @endforeach
-            </ul>
+                        
+                        <!-- Delete Button -->
+                        <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="task-delete">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-delete">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M3 6h18"></path>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                            </button>
+                        </form>
+                    </li>
+                    @endforeach
+                </ul>
         </div>
     </div>
 </div>
