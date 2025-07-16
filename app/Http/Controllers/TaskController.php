@@ -31,8 +31,12 @@ class TaskController extends Controller
     {
         $this->authorize('update', $task);
 
+        $request->validate([
+            'completed' => 'required|boolean' // Validasi sebagai boolean
+        ]);
+
         $task->update([
-            'completed' => $request->has('completed')
+            'completed' => $request->input('completed') // Gunakan input() bukan has()
         ]);
 
         return back();
