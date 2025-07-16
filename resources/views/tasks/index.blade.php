@@ -103,52 +103,51 @@
     </div>
 </div>
 
-            <!-- Task List -->
-                <ul class="task-list">
-                    @foreach ($tasks as $task)
-                    <li class="task-item {{ $task->completed ? 'completed' : '' }}">
-                        <!-- Update Form (for checkbox) -->
-                        <form id="update-form-{{ $task->id }}" 
-                            action="{{ route('tasks.update', $task) }}" 
-                            method="POST"
-                            class="d-inline">
-                            @csrf
-                            @method('PATCH')
-                            <input type="hidden" name="completed" value="{{ $task->completed ? 0 : 1 }}">
-                            
-                            <!-- Checkbox -->
-                            <label class="task-checkbox">
-                                <input 
-                                    type="checkbox"
-                                    {{ $task->completed ? 'checked' : '' }}
-                                    onchange="
-                                        this.form.querySelector('input[name=\'completed\']').value = this.checked ? 1 : 0;
-                                        this.form.submit();
-                                    "
-                                >
-                                <span class="checkmark"></span>
-                            </label>
-                        </form>
-                        
-                        <!-- Task Content -->
-                        <div class="task-body">
-                            <span class="task-title">{{ $task->title }}</span>
-                            <div class="task-tags">
-                                @if($task->due_date)
-                                <span class="task-due">
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                                        <polyline points="7 3 7 8 15 8"></polyline>
-                                    </svg>
-                                    {{ $task->due_date->format('M j') }}
-                                </span>
-                                @endif
-                                <span class="task-priority priority-{{ $task->priority }}">
-                                    {{ ucfirst($task->priority) }}
-                                </span>
-                            </div>
+            <!-- Task List -->  
+            <ul class="task-list">
+                @foreach ($tasks as $task)
+                <li class="task-item {{ $task->completed ? 'completed' : '' }}">
+                    <!-- Checkbox -->
+                    <label class="task-checkbox">
+                        <input 
+                            type="checkbox"
+                            {{ $task->completed ? 'checked' : '' }}
+                            onchange="
+                                document.getElementById('complete-form-{{ $task->id }}').submit();
+                            "
+                        >
+                        <span class="checkmark"></span>
+                    </label>
+                    
+                    <!-- Task Content -->
+                    <div class="task-body">
+                        <span class="task-title">{{ $task->title }}</span>
+                        <div class="task-meta">
+                            <span class="task-priority priority-{{ $task->priority }}">
+                                {{ ucfirst($task->priority) }}
+                            </span>
+                            @if($task->due_date)
+                            <span class="task-due">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                    <polyline points="7 3 7 8 15 8"></polyline>
+                                </svg>
+                                {{ $task->due_date->format('M j') }}
+                            </span>
+                            @endif
                         </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="task-actions-todo">
+                        <!-- Edit Button -->
+                        <button class="btn-edit" onclick="openEditModal({{ $task->id }})">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </button>
                         
                         <!-- Delete Button -->
                         <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="task-delete">
@@ -161,9 +160,55 @@
                                 </svg>
                             </button>
                         </form>
-                    </li>
-                    @endforeach
-                </ul>
+                    </div>
+                    
+                    <!-- Hidden form for completing tasks -->
+                    <form id="complete-form-{{ $task->id }}" action="{{ route('tasks.update', $task) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="completed" value="{{ $task->completed ? 0 : 1 }}">
+                    </form>
+                </li>
+                @endforeach
+            </ul>
+
+            <!-- Edit Task Modal -->
+            <div class="modal" id="editModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Edit Task</h5>
+                        <button class="modal-close" onclick="closeEditModal()">&times;</button>
+                    </div>
+                    <form id="editTaskForm" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="edit_title">Task Title</label>
+                                <input type="text" id="edit_title" name="title" class="form-control" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="edit_due_date">Due Date</label>
+                                    <input type="date" id="edit_due_date" name="due_date" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="edit_priority">Priority</label>
+                                    <select id="edit_priority" name="priority" class="form-control">
+                                        <option value="low">Low Priority</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High Priority</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+                            <button type="submit" class="btn-save">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -389,5 +434,52 @@ document.addEventListener('DOMContentLoaded', function() {
         Notification.requestPermission();
     }
 });
+</script>
+<script>
+// Edit Task Modal Functions
+function openEditModal(taskId) {
+    const modal = document.getElementById('editModal');
+    const form = document.getElementById('editTaskForm');
+    
+    // Fetch task data (you might want to get this from your data attributes or API)
+    const taskItem = document.querySelector(`.task-item[data-task-id="${taskId}"]`);
+    const title = taskItem.querySelector('.task-title').textContent;
+    const priority = taskItem.querySelector('.task-priority').textContent.toLowerCase();
+    const dueDate = taskItem.querySelector('.task-due')?.textContent.trim();
+    
+    // Set form action
+    form.action = `/tasks/${taskId}`;
+    
+    // Fill form fields
+    document.getElementById('edit_title').value = title;
+    document.getElementById('edit_priority').value = priority;
+    
+    // Convert due date to YYYY-MM-DD format if exists
+    if (dueDate) {
+        const dateParts = dueDate.split(' ');
+        const month = new Date(Date.parse(dateParts[0] + " 1, 2023")).getMonth() + 1;
+        const day = dateParts[1];
+        const year = new Date().getFullYear(); // Assuming current year
+        const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.padStart(2, '0')}`;
+        document.getElementById('edit_due_date').value = formattedDate;
+    } else {
+        document.getElementById('edit_due_date').value = '';
+    }
+    
+    // Show modal
+    modal.style.display = 'flex';
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('editModal');
+    if (event.target == modal) {
+        closeEditModal();
+    }
+}
 </script>
 @endsection
