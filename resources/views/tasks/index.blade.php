@@ -140,7 +140,7 @@
                     </div>
                     
                     <!-- Action Buttons -->
-                    <div class="task-actions-todo">
+                    <div class="task-actions-todo   ">
                         <!-- Edit Button -->
                         <button class="btn-edit" onclick="openEditModal({{ $task->id }})">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">

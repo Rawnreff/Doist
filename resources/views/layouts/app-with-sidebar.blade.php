@@ -28,12 +28,13 @@
                 </a>
             </nav>
             <div class="sidebar-footer">
-                <div class="user-info">
+                <div class="user-info" style="display: flex; align-items: center; gap: 8px;">
                     <div class="user-avatar">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}`
                     </div>
                     <span class="user-name">{{ Auth::user()->name }}</span>
                 </div>
+
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="btn-logout">

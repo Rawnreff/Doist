@@ -85,10 +85,19 @@
         }
         
         /* User Profile */
-        .user-profile {
+       .user-profile {
             padding: 1.5rem;
             border-top: 1px solid var(--border);
             position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text);
         }
         
         .user-avatar {
@@ -187,7 +196,10 @@
         <div class="user-profile">
             @auth
                 <div class="user-avatar" id="userAvatar">
-                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                </div>
+                <div class="user-name">
+                    {{ Auth::user()->name }}
                 </div>
                 <div class="logout-popup" id="logoutPopup">
                     <form action="{{ route('logout') }}" method="POST">
@@ -199,6 +211,8 @@
                 </div>
             @endauth
         </div>
+
+
     </div>
 
     <!-- Main Content -->

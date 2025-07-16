@@ -6,7 +6,7 @@
 <div class="pomodoro-app">
     <div class="pomodoro-card">
         <div class="pomodoro-header">
-            <h2>Podomoro Timer</h2>
+            <h2>Focus Timer</h2>
             <div class="pomodoro-tabs">
                 <button class="tab-btn active" data-mode="pomodoro">Podomoro</button>
                 <button class="tab-btn" data-mode="short-break">Short Break</button>
