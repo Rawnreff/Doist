@@ -1061,6 +1061,10 @@ a:hover, a:focus {
     font-size: 0.875rem;
 }
 
+textarea.form-control {
+    resize: none;
+}
+
 .form-control:focus {
     outline: none;
     border-color: var(--primary);
