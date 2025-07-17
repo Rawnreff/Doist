@@ -4,9 +4,8 @@
 
 @section('content')
 <div class="container-fluid p-4">
-    <!-- Calendar Container -->
     <div class="calendar-container">
-        <!-- Enhanced Header -->
+        <!-- Header -->
         <div class="calendar-header">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
@@ -17,34 +16,28 @@
                     <i class="bi bi-plus-circle me-2"></i>Add Task
                 </a>
             </div>
-            
-            <div class="calendar-stats">
-                <div class="stat-item">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-clock me-3"></i>
-                        <div>
-                            <div class="fw-semibold">{{ $pendingCount }}</div>
-                            <div class="small opacity-75">Pending</div>
-                        </div>
+
+            <div class="calendar-stats mt-3">
+                <div class="stat-item d-flex align-items-center">
+                    <i class="bi bi-clock me-3"></i>
+                    <div>
+                        <div class="fw-semibold">{{ $pendingCount }}</div>
+                        <div class="small opacity-75">Pending</div>
                     </div>
                 </div>
-                <div class="stat-item">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-check-circle me-3"></i>
-                        <div>
-                            <div class="fw-semibold">{{ $completedCount }}</div>
-                            <div class="small opacity-75">Completed</div>
-                        </div>
+                <div class="stat-item d-flex align-items-center">
+                    <i class="bi bi-check-circle me-3"></i>
+                    <div>
+                        <div class="fw-semibold">{{ $completedCount }}</div>
+                        <div class="small opacity-75">Completed</div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <!-- Calendar Body -->
         <div class="position-relative">
             <div id="modernCalendar" class="modern-calendar"></div>
-            
-            <!-- Loading State -->
             <div id="calendarLoading" class="calendar-loading d-none">
                 <div class="text-center">
                     <div class="spinner"></div>
@@ -52,32 +45,28 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Enhanced Legend -->
+
+        <!-- Legend -->
         <div class="legend">
             <div class="d-flex justify-content-center gap-4 flex-wrap">
                 <div class="legend-item">
-                    <span class="legend-dot bg-danger"></span>
-                    <span class="fw-medium">High Priority</span>
+                    <span class="legend-dot bg-danger"></span><span class="fw-medium">High Priority</span>
                 </div>
                 <div class="legend-item">
-                    <span class="legend-dot bg-warning"></span>
-                    <span class="fw-medium">Medium Priority</span>
+                    <span class="legend-dot bg-warning"></span><span class="fw-medium">Medium Priority</span>
                 </div>
                 <div class="legend-item">
-                    <span class="legend-dot bg-success"></span>
-                    <span class="fw-medium">Low Priority</span>
+                    <span class="legend-dot bg-success"></span><span class="fw-medium">Low Priority</span>
                 </div>
                 <div class="legend-item">
-                    <span class="legend-dot bg-primary"></span>
-                    <span class="fw-medium">Normal</span>
+                    <span class="legend-dot bg-primary"></span><span class="fw-medium">Normal</span>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Enhanced Modal without backdrop -->
+<!-- Detail Task Modal -->
 <div class="modal" id="modernTaskModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
@@ -92,7 +81,6 @@
                     <h4 id="modernTaskModalTitle" class="mb-0 fw-bold"></h4>
                     <span id="modernTaskModalStatus" class="badge rounded-pill fs-6"></span>
                 </div>
-                
                 <div class="task-meta mb-4">
                     <div class="d-flex align-items-center mb-2">
                         <i class="bi bi-calendar-event text-muted me-2"></i>
@@ -103,7 +91,6 @@
                         <span id="modernTaskModalPriority" class="badge"></span>
                     </div>
                 </div>
-                
                 <div class="task-description">
                     <h6 class="text-muted text-uppercase small fw-bold mb-2">Description</h6>
                     <p id="modernTaskModalDescription" class="mb-0"></p>
@@ -119,7 +106,59 @@
     </div>
 </div>
 
+<!-- Edit Task Modal -->
+<div class="modal" id="modernEditTaskModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="fw-bold mb-0">Edit Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editTaskForm" method="POST">
+                @csrf
+                @method('PATCH')
+                <div class="modal-body pt-0 px-4">
+                    <div class="mb-3">
+                        <label for="edit_title" class="form-label">Task Title</label>
+                        <input type="text" class="form-control" id="edit_title" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_description" class="form-label">Description</label>
+                        <textarea class="form-control" id="edit_description" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="edit_due_date" class="form-label">Due Date</label>
+                            <input type="date" class="form-control" id="edit_due_date" name="due_date">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit_priority" class="form-label">Priority</label>
+                            <select class="form-select" id="edit_priority" name="priority">
+                                <option value="low">Low Priority</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High Priority</option>
+                                <option value="default">Normal</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 bg-light rounded-bottom">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-2"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- CSS -->
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+
 <style>
     /* Enhanced Calendar Container */
     .calendar-container {
@@ -469,16 +508,14 @@
     }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const calendarEl = document.getElementById('modernCalendar');
         const loadingEl = document.getElementById('calendarLoading');
         const tasks = @json($tasks);
-        
-        // Show loading state
+
         loadingEl.classList.remove('d-none');
-        
+
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             headerToolbar: {
@@ -490,27 +527,24 @@
                 timeGridWeek: {
                     dayHeaderFormat: { weekday: 'short', day: 'numeric' }
                 },
-                listWeek: {
-                    buttonText: 'List'
-                }
+                listWeek: { buttonText: 'List' }
             },
             events: tasks.map(task => ({
                 ...task,
                 className: `event-${task.priority || 'default'}`
             })),
-            eventClick: function(info) {
+            eventClick: function (info) {
                 info.jsEvent.preventDefault();
                 showTaskModal(info.event);
             },
-            eventContent: function(arg) {
+            eventContent: function (arg) {
                 const priority = arg.event.extendedProps.priority || 'default';
                 return {
                     html: `
                         <div class="fc-event-main">
                             <span class="priority-icon ${priority}"></span>
                             <span class="fc-event-title">${arg.event.title}</span>
-                        </div>
-                    `
+                        </div>`
                 };
             },
             height: 'auto',
@@ -519,67 +553,26 @@
             editable: false,
             selectable: false,
             dayMaxEvents: 3,
-            eventDidMount: function(info) {
-                // Add tooltip
-                info.el.title = info.event.title + (info.event.extendedProps.description ? 
-                    ' - ' + info.event.extendedProps.description : '');
+            eventDidMount: function (info) {
+                info.el.title = info.event.title + 
+                    (info.event.extendedProps.description ? ` - ${info.event.extendedProps.description}` : '');
             }
         });
-        
-        // Hide loading and render calendar
+
         setTimeout(() => {
             loadingEl.classList.add('d-none');
             calendar.render();
         }, 500);
-        
-        // Show task modal
-        function showTaskModal(task) {
-            const modal = new bootstrap.Modal(document.getElementById('modernTaskModal'), {
-                backdrop: false // Disable backdrop
-            });
-            
-            const priority = task.extendedProps.priority || 'default';
-            
-            document.getElementById('modernTaskModalTitle').textContent = task.title;
-            document.getElementById('modernTaskModalDescription').textContent = 
-                task.extendedProps.description || 'No description provided';
-            
-            // Set priority indicator
-            const priorityIndicator = document.getElementById('modalPriorityIndicator');
-            priorityIndicator.className = `priority-indicator ${priority}`;
-            
-            // Set priority badge
-            const priorityBadge = document.getElementById('modernTaskModalPriority');
-            priorityBadge.textContent = priority.charAt(0).toUpperCase() + priority.slice(1);
-            priorityBadge.className = 'badge ' + getPriorityClass(priority);
-            
-            // Set due date
-            document.getElementById('modernTaskModalDueDate').textContent = 
-                task.start ? formatDate(task.start) : 'No due date';
-            
-            // Set status
-            const statusBadge = document.getElementById('modernTaskModalStatus');
-            statusBadge.textContent = task.extendedProps.completed ? 'Completed' : 'Pending';
-            statusBadge.className = 'badge rounded-pill ' + 
-                (task.extendedProps.completed ? 'bg-success' : 'bg-warning');
-            
-            // Set edit link
-            document.getElementById('modernTaskEditLink').href = `/tasks/${task.id}/edit`;
-            
-            modal.show();
-        }
-        
-        // Format date for display
+
         function formatDate(date) {
-            return new Date(date).toLocaleDateString('en-US', { 
-                weekday: 'short', 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric' 
+            return new Date(date).toLocaleDateString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
             });
         }
-        
-        // Get priority class for badges
+
         function getPriorityClass(priority) {
             return {
                 'high': 'bg-danger',
@@ -588,6 +581,79 @@
                 'default': 'bg-primary'
             }[priority] || 'bg-secondary';
         }
+
+        function showTaskModal(task) {
+            const modal = new bootstrap.Modal(document.getElementById('modernTaskModal'), {
+                backdrop: false
+            });
+
+            const priority = task.extendedProps.priority || 'default';
+            document.getElementById('modernTaskModalTitle').textContent = task.title;
+            document.getElementById('modernTaskModalDescription').textContent =
+                task.extendedProps.description || 'No description provided';
+            document.getElementById('modalPriorityIndicator').className = `priority-indicator ${priority}`;
+            document.getElementById('modernTaskModalPriority').textContent = priority.charAt(0).toUpperCase() + priority.slice(1);
+            document.getElementById('modernTaskModalPriority').className = 'badge ' + getPriorityClass(priority);
+            document.getElementById('modernTaskModalDueDate').textContent =
+                task.start ? formatDate(task.start) : 'No due date';
+            document.getElementById('modernTaskModalStatus').textContent =
+                task.extendedProps.completed ? 'Completed' : 'Pending';
+            document.getElementById('modernTaskModalStatus').className =
+                'badge rounded-pill ' + (task.extendedProps.completed ? 'bg-success' : 'bg-warning');
+
+            const editBtn = document.getElementById('modernTaskEditLink');
+            editBtn.href = '#';
+            editBtn.onclick = function (e) {
+                e.preventDefault();
+                showEditModal(task);
+                modal.hide();
+            };
+
+            modal.show();
+        }
+
+        function showEditModal(task) {
+            const modal = new bootstrap.Modal(document.getElementById('modernEditTaskModal'), {
+                backdrop: false
+            });
+
+            document.getElementById('edit_title').value = task.title;
+            document.getElementById('edit_description').value = task.extendedProps.description || '';
+            document.getElementById('edit_due_date').value = task.start ? new Date(task.start).toISOString().split('T')[0] : '';
+            document.getElementById('edit_priority').value = task.extendedProps.priority || 'default';
+
+            const form = document.getElementById('editTaskForm');
+            form.action = `/tasks/${task.id}`;
+
+            modal.show();
+        }
+
+        document.getElementById('editTaskForm')?.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const taskId = form.action.split('/').pop();
+            const formData = new FormData(form);
+            formData.append('_method', 'PATCH');
+
+            fetch(`/tasks/${taskId}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(res => {
+                if (!res.ok) return res.text().then(text => { throw new Error(text); });
+                return res.json();
+            })
+            .then(() => location.reload())
+            .catch(err => {
+                console.error(err);
+                alert('Failed to update task.');
+            });
+        });
     });
 </script>
 @endsection

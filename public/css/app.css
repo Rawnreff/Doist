@@ -363,7 +363,7 @@ a:hover, a:focus {
   color: var(--text-light);
   cursor: pointer;
   padding: 0.25rem;
-  opacity: 0;
+  opacity: 100;
   transition: var(--transition);
 }
 
@@ -811,7 +811,7 @@ a:hover, a:focus {
 .task-actions-todo {
     display: flex;
     gap: 0.5rem;
-    opacity: 0;
+    opacity: 100;
     transition: var(--transition);
 }
 
