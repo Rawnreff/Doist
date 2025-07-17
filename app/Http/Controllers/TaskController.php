@@ -60,20 +60,20 @@ class TaskController extends Controller
         return view('tasks.index', compact('tasks'));
     }
 
-    public function store(Request $request)
+        public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'title' => 'required|max:255',
             'description' => 'nullable|string',
-            'due_date' => 'nullable|date|after_or_equal:today',
-            'priority' => 'required|in:low,medium,high'
+            'due_date' => 'nullable|date',
+            'priority' => 'in:low,medium,high'
         ]);
 
-        Auth::user()->tasks()->create($validated);
+        Auth::user()->tasks()->create($request->all());
 
-        return redirect()->route('tasks.index')->with('success', 'Task created successfully!');
+        return redirect()->route('tasks.index');
     }
-
+    
     public function edit(Task $task)
     {
         $this->authorize('update', $task);
@@ -84,24 +84,56 @@ class TaskController extends Controller
     {
         $this->authorize('update', $task);
 
-        // Handle checkbox update
         if ($request->has('completed')) {
-            $request->validate(['completed' => 'boolean']);
             $task->update(['completed' => $request->completed]);
-            return back()->with('success', 'Task status updated!');
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Task status updated successfully',
+                    'redirect' => route('tasks.index')
+                ]);
+            }
+            return back();
         }
 
-        // Handle full task update
         $validated = $request->validate([
             'title' => 'required|max:255',
             'description' => 'nullable|string',
-            'due_date' => 'nullable|date|after_or_equal:today',
+            'due_date' => 'nullable|date',
             'priority' => 'required|in:low,medium,high'
         ]);
 
         $task->update($validated);
 
-        return redirect()->route('tasks.index')->with('success', 'Task updated successfully!');
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Task updated successfully',
+                'redirect' => route('tasks.index')
+            ]);
+        }
+
+        return redirect()->route('tasks.index');
+    }
+
+    public function updateNoCsrf(Request $request, Task $task)
+    {
+        $this->authorize('update', $task);
+
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'nullable|string',
+            'due_date' => 'nullable|date',
+            'priority' => 'required|in:low,medium,high'
+        ]);
+
+        $task->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Task updated successfully (no CSRF)',
+            'redirect' => route('tasks.index')
+        ]);
     }
 
     public function destroy(Task $task)
