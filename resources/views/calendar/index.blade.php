@@ -58,9 +58,6 @@
                 <div class="legend-item">
                     <span class="legend-dot bg-success"></span><span class="fw-medium">Low Priority</span>
                 </div>
-                <div class="legend-item">
-                    <span class="legend-dot bg-primary"></span><span class="fw-medium">Normal</span>
-                </div>
             </div>
         </div>
     </div>
@@ -137,7 +134,6 @@
                                 <option value="low">Low Priority</option>
                                 <option value="medium">Medium</option>
                                 <option value="high">High Priority</option>
-                                <option value="default">Normal</option>
                             </select>
                         </div>
                     </div>
