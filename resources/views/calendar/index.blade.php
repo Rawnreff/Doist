@@ -94,10 +94,13 @@
                 </div>
             </div>
             <div class="modal-footer border-0 bg-light rounded-bottom">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                 <a id="modernTaskEditLink" href="#" class="btn btn-primary">
                     <i class="bi bi-pencil me-2"></i>Edit Task
                 </a>
+                <button type="button" id="markCompletedBtn" class="btn btn-success">
+                    <i class="bi bi-check-circle me-2"></i>Mark as Completed
+                </button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -498,6 +501,12 @@
         animation: spin 1s linear infinite;
     }
 
+    .event-completed {
+        background: linear-gradient(135deg, #e5e7eb, #f3f4f6) !important;
+        color: #111827 !important;
+        border-left: 4px solid #6b7280;
+    }
+
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
@@ -527,7 +536,9 @@
             },
             events: tasks.map(task => ({
                 ...task,
-                className: `event-${task.priority || 'default'}`
+                className: task.completed 
+                    ? 'event-completed'
+                    : `event-${task.priority || 'default'}`
             })),
             eventClick: function (info) {
                 info.jsEvent.preventDefault();
@@ -597,6 +608,16 @@
             document.getElementById('modernTaskModalStatus').className =
                 'badge rounded-pill ' + (task.extendedProps.completed ? 'bg-success' : 'bg-warning');
 
+            const completedBtn = document.getElementById('markCompletedBtn');
+            if (task.extendedProps.completed) {
+                completedBtn.classList.add('d-none');
+            } else {
+                completedBtn.classList.remove('d-none');
+                completedBtn.onclick = function () {
+                    markTaskCompleted(task.id);
+                };
+            }
+
             const editBtn = document.getElementById('modernTaskEditLink');
             editBtn.href = '#';
             editBtn.onclick = function (e) {
@@ -622,6 +643,25 @@
             form.action = `/tasks/${task.id}`;
 
             modal.show();
+        }
+
+        function markTaskCompleted(taskId) {
+            fetch(`/tasks/${taskId}/complete`, {
+                method: 'PATCH',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json'
+                }
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to mark task as completed");
+                return res.json();
+            })
+            .then(() => location.reload())
+            .catch(err => {
+                console.error(err);
+                alert('Gagal menyelesaikan task.');
+            });
         }
 
         document.getElementById('editTaskForm')?.addEventListener('submit', function (e) {

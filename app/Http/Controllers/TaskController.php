@@ -154,4 +154,19 @@ class TaskController extends Controller
         $task->update(['completed' => !$task->completed]);
         return response()->json(['completed' => $task->completed]);
     }
+
+    public function complete(Task $task)
+    {
+        // Tambahkan ini jika pakai middleware auth
+        if (auth()->id() !== $task->user_id) {
+            abort(403);
+        }
+
+        $task->completed = true;
+        $task->save();
+
+        return response()->json(['message' => 'Task marked as completed.']);
+    }
+
+
 }
