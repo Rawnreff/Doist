@@ -92,7 +92,7 @@
                 <span class="filter-label">Sort by:</span>
                 <a href="{{ request()->fullUrlWithQuery(['sort' => 'latest']) }}" 
                 class="filter-select {{ request()->input('sort') === 'latest' || !request()->has('sort') ? 'active-filter' : '' }}">
-                    Newest
+                    Latest
                 </a>
                 <a href="{{ request()->fullUrlWithQuery(['sort' => 'oldest']) }}" 
                 class="filter-select {{ request()->input('sort') === 'oldest' ? 'active-filter' : '' }}">
@@ -109,10 +109,10 @@
             </div>
         </div>
 
-            <!-- Task List -->
-            <ul class="task-list">
-                @foreach ($tasks as $task)
-                <li class="task-item {{ $task->completed ? 'completed' : '' }}" data-task-id="{{ $task->id }}" data-description="{{ $task->description }}">
+    <!-- Task List -->
+    <ul class="task-list">
+        @foreach ($tasks as $task)
+        <li class="task-item {{ $task->completed ? 'completed' : '' }}" data-task-id="{{ $task->id }}" data-description="{{ $task->description }}">
     <!-- Checkbox -->
     <label class="task-checkbox">
         <input 
@@ -128,7 +128,7 @@
     <div class="task-body">
         <span class="task-title">{{ $task->title }}</span>
         @if($task->description)
-            <p class="task-description">{{ $task->description }}</p>
+            <p class="task-description-text">{{ $task->description }}</p>
         @endif
         <div class="task-meta">
             <span class="task-priority priority-{{ $task->priority }}">

@@ -19,7 +19,7 @@
             @foreach($deletedTasks as $task)
                 <div class="trash-item">
                     <div class="task-info">
-                        <h4>{{ $task->title }}</h4>
+                        <h4 class="task-title">{{ $task->title }}</h4>
                         <div class="task-meta">
                             @if($task->due_date)
                                 <span class="due-date">
@@ -47,7 +47,7 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn-destroy">
-                                <i class="bi bi-trash-fill"></i> Delete permanently
+                                <i class="bi bi-trash-fill"></i> Delete
                             </button>
                         </form>
                     </div>
@@ -178,6 +178,14 @@
     
     .btn-destroy:hover {
         background-color: #fecaca;
+    }
+
+    .task-title {
+        max-width: 480px;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        word-wrap: break-word;
+        white-space: collapse;
     }
 </style>
 @endsection
