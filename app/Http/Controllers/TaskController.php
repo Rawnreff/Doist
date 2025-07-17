@@ -60,7 +60,7 @@ class TaskController extends Controller
         return view('tasks.index', compact('tasks'));
     }
 
-        public function store(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'title' => 'required|max:255',
@@ -74,6 +74,11 @@ class TaskController extends Controller
         return redirect()->route('tasks.index');
     }
     
+    public function create()
+    {
+        return view('tasks.create');
+    }
+
     public function edit(Task $task)
     {
         $this->authorize('update', $task);
