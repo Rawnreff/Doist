@@ -55,6 +55,23 @@
             @endforeach
         </div>
     @endif
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-confirmation-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <h5>Are you sure?</h5>
+            <p>This task will be permanently deleted and cannot be recovered.</p>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <form id="delete-form" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn-confirm">Yes, Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <style>
@@ -187,5 +204,110 @@
         word-wrap: break-word;
         white-space: collapse;
     }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(17, 24, 39, 0.75);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+    }
+
+    .modal-box {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        animation: scaleIn 0.3s ease-in-out;
+    }
+
+    .modal-box h5 {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: #111827;
+    }
+
+    .modal-box p {
+        color: #6b7280;
+        margin-bottom: 1.25rem;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .btn-cancel {
+        background-color: #f3f4f6;
+        color: #374151;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .btn-confirm {
+        background-color: #ef4444;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .btn-cancel:hover {
+        background-color: #e5e7eb;
+    }
+
+    .btn-confirm:hover {
+        background-color: #dc2626;
+    }
+
+    @keyframes scaleIn {
+        from {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
 </style>
+
+<script>
+    function openDeleteModal(formAction) {
+        const modal = document.getElementById('delete-confirmation-modal');
+        const deleteForm = document.getElementById('delete-form');
+        deleteForm.action = formAction;
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('delete-confirmation-modal');
+        modal.style.display = 'none';
+    }
+
+    // Intercept delete button clicks
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.btn-destroy').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const form = this.closest('form');
+                openDeleteModal(form.action);
+            });
+        });
+    });
+</script>
 @endsection

@@ -23,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 
+
     // Podomoro Route
     Route::get('/podomoro', [PodomoroController::class, 'index'])->name('podomoro');
 

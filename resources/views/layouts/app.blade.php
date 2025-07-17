@@ -99,6 +99,8 @@
             font-size: 0.9rem;
             font-weight: 500;
             color: var(--text);
+            /* Add cursor pointer to indicate it's clickable */
+            cursor: pointer;
         }
         
         .user-avatar {
@@ -163,7 +165,6 @@
     @stack('styles')
 </head>
 <body>
-    <!-- Vertical Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
             <a href="{{ route('tasks.index') }}" class="sidebar-brand">
@@ -199,7 +200,7 @@
                 <div class="user-avatar" id="userAvatar">
                     {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
                 </div>
-                <div class="user-name">
+                <div class="user-name" id="userName">
                     {{ Auth::user()->name }}
                 </div>
                 <div class="logout-popup" id="logoutPopup">
@@ -216,7 +217,6 @@
 
     </div>
 
-    <!-- Main Content -->
     <main class="main-content">
         @yield('content')
     </main>
@@ -227,6 +227,11 @@
     <script>
         // Toggle logout popup
         document.getElementById('userAvatar')?.addEventListener('click', function() {
+            document.getElementById('logoutPopup').classList.toggle('show');
+        });
+
+        // Add event listener to the user-name element
+        document.getElementById('userName')?.addEventListener('click', function() {
             document.getElementById('logoutPopup').classList.toggle('show');
         });
         
