@@ -111,7 +111,7 @@
     .trash-item {
         background: var(--card-bg);
         border-radius: var(--radius);
-        padding: 1.25rem;
+        padding: 1.6rem;
         box-shadow: var(--shadow);
         display: flex;
         justify-content: space-between;

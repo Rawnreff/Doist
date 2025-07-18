@@ -131,7 +131,7 @@ a:hover, a:focus {
   background: var(--card-bg);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 1.5rem;
+  padding: 2rem;
   transition: var(--transition);
 }
 

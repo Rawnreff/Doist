@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-lg-8">
+    <div class="col-lg-10">
         <div class="task-card">
             <div class="task-header">
                 <h4>✨ My Tasks</h4>
