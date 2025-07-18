@@ -278,6 +278,15 @@
         text-decoration: line-through;
         color: #94a3b8;
     }
+
+    /* Style untuk timer Podomoro */
+    .podomoro-timer {
+        font-family: 'Inter', sans-serif; /* Mengatur font ke Inter */
+        font-size: 4em; /* Biarkan ukuran tetap besar atau sesuaikan */
+        font-weight: 600; /* Atau sesuaikan dengan Inter weight yang diinginkan */
+        color: var(--text); /* Warna teks utama */
+        margin-bottom: 1rem;
+    }
 </style>
 
 <script>
