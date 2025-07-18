@@ -253,7 +253,7 @@
     /* Day Grid Improvements */
     .fc .fc-daygrid-day-frame {
         padding: 0.75rem;
-        min-height: 70px;
+        min-height: 110px;
         border-radius: 4px;
         transition: background-color 0.2s;
     }
@@ -469,7 +469,7 @@
         }
 
         .fc .fc-daygrid-day-frame {
-            min-height: 60px;
+            min-height: 80px;
             padding: 0.5rem;
         }
 
